@@ -3,51 +3,378 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Boutique de Dés</title>
+    <title>Mon Jeu de Dés - 10 Articles</title>
     <style>
-        body { font-family: sans-serif; text-align: center; line-height: 1.6; padding: 20px; background-color: #f4f4f9; }
-        header { margin-bottom: 40px; }
-        .logo { width: 100px; height: 100px; background: #333; color: white; line-height: 100px; border-radius: 50%; margin: 0 auto; }
-        .grid { display: flex; justify-content: center; gap: 20px; flex-wrap: wrap; }
-        .card { background: white; padding: 20px; border-radius: 8px; box-shadow: 0 2px 5px rgba(0,0,0,0.1); width: 250px; }
-        .card img { width: 100%; height: 150px; object-fit: cover; border-radius: 4px; }
-        button { background: #007bff; color: white; border: none; padding: 10px 20px; border-radius: 5px; cursor: pointer; margin-top: 10px; }
-        button:hover { background: #0056b3; }
+        /* Styles de base */
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            margin: 0;
+            padding: 0;
+            background-color: #ffffff;
+            color: #333333;
+        }
+
+        /* 1. ESPACE BLANC TOUT EN HAUT */
+        .top-spacer {
+            height: 30px;
+            background-color: #ffffff;
+        }
+
+        /* 2. BARRE DU HAUT ROUGE AVEC DISPOSITION SPÉCIALE */
+        header {
+            background: #e74c3c;
+            color: #ffffff;
+            padding: 15px 40px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            position: relative;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+        }
+
+        header h1 {
+            margin: 0;
+            font-size: 1.5rem;
+            font-weight: 700;
+            z-index: 2;
+        }
+
+        /* LOGO PILE AU MILIEU */
+        header .logo-container {
+            position: absolute;
+            left: 50%;
+            top: 50%;
+            transform: translate(-50%, -50%);
+            z-index: 1;
+        }
+
+        header img {
+            height: 60px;
+            width: auto;
+            display: block;
+            object-fit: contain;
+        }
+
+        /* SLOGAN À DROITE */
+        header .slogan {
+            margin: 0;
+            font-style: italic;
+            font-size: 1.1rem;
+            z-index: 2;
+        }
+
+        /* 3. TEXTE DE PRÉSENTATION EN DESSOUS */
+        .presentation-text {
+            max-width: 800px;
+            margin: 40px auto 20px auto;
+            text-align: center;
+            padding: 0 20px;
+        }
+
+        .presentation-text h2 {
+            color: #2c3e50;
+            font-size: 2rem;
+            margin-bottom: 15px;
+        }
+
+        .presentation-text p {
+            font-size: 1.1rem;
+            color: #666666;
+        }
+
+        /* Grille d'articles */
+        .container {
+            max-width: 1100px;
+            margin: 40px auto;
+            padding: 0 20px;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 30px;
+            justify-content: center;
+        }
+
+        /* CASES RECTANGULAIRES EN VERT PASTEL */
+        article {
+            background: #e2f5ed;
+            border-radius: 12px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.02);
+            width: calc(33% - 20px);
+            min-width: 280px;
+            padding: 25px;
+            box-sizing: border-box;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            display: flex;
+            flex-direction: column;
+        }
+
+        article:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.08);
+        }
+
+        article h2 {
+            color: #2c3e50;
+            margin-top: 0;
+            font-size: 1.4rem;
+        }
+
+        .meta {
+            font-size: 0.8rem;
+            color: #7f8c8d;
+            margin-bottom: 12px;
+        }
+
+        article p {
+            flex-grow: 1;
+            margin-bottom: 25px;
+            color: #4a5568;
+        }
+
+        footer {
+            text-align: center;
+            padding: 30px;
+            background: #ffffff;
+            color: #888888;
+            border-top: 1px solid #eeeeee;
+            margin-top: 60px;
+        }
+
+        /* STRUCTURE DU BOUTON DÉ AVEC TRANSPARENCE ET EFFET DE REFLET */
+        .btn-d12 {
+            display: block;
+            width: 100px;
+            height: 100px;
+            margin: 0 auto;
+            text-decoration: none;
+            font-weight: bold;
+            font-size: 0.95rem;
+            text-align: center;
+            line-height: 100px;
+            border: none;
+            cursor: pointer;
+            position: relative;
+            overflow: hidden; /* Empêche le reflet de dépasser du dé */
+            
+            /* Effet flou de fond (Glassmorphism) */
+            backdrop-filter: blur(4px);
+            -webkit-backdrop-filter: blur(4px);
+            
+            /* Animations fluides */
+            transition: transform 0.6s cubic-bezier(0.25, 1, 0.5, 1), background-color 0.3s ease, box-shadow 0.3s ease;
+            -webkit-clip-path: polygon(50% 0%, 90% 20%, 100% 60%, 75% 100%, 25% 100%, 0% 60%, 10% 20%);
+            clip-path: polygon(50% 0%, 90% 20%, 100% 60%, 75% 100%, 25% 100%, 0% 60%, 10% 20%);
+        }
+
+        /* CRÉATION DU REFLET LUMINEUX (Éclat oblique) */
+        .btn-d12::after {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -60%;
+            width: 30%;
+            height: 200%;
+            background: linear-gradient(
+                to right, 
+                rgba(255, 255, 255, 0) 0%, 
+                rgba(255, 255, 255, 0.55) 50%, 
+                rgba(255, 255, 255, 0) 100%
+            );
+            transform: rotate(30deg);
+            transition: transform 0.5s ease;
+        }
+
+        /* ANIMATION DES EFFETS AU SURVOL */
+        .btn-d12:hover {
+            transform: rotate(360deg);
+        }
+
+        /* Au survol, le reflet traverse le dé de gauche à droite */
+        .btn-d12:hover::after {
+            transform: translate(400%, -20%) rotate(30deg);
+            transition: transform 0.6s ease-out;
+        }
+
+        /* COULEURS DES DÉS (TRANSPARENCE + GLOW) */
+        /* Rouge */
+        .d12-red { 
+            background-color: rgba(231, 76, 60, 0.75); 
+            color: white; 
+            box-shadow: 0 0 15px rgba(231, 76, 60, 0.4);
+        }
+        .d12-red:hover { 
+            background-color: rgba(231, 76, 60, 0.95); 
+            box-shadow: 0 0 25px rgba(231, 76, 60, 0.85); 
+        }
+
+        /* Vert */
+        .d12-green { 
+            background-color: rgba(46, 204, 113, 0.75); 
+            color: white; 
+            box-shadow: 0 0 15px rgba(46, 204, 113, 0.4);
+        }
+        .d12-green:hover { 
+            background-color: rgba(46, 204, 113, 0.95); 
+            box-shadow: 0 0 25px rgba(46, 204, 113, 0.85); 
+        }
+
+        /* Bleu */
+        .d12-blue { 
+            background-color: rgba(52, 152, 219, 0.75); 
+            color: white; 
+            box-shadow: 0 0 15px rgba(52, 152, 219, 0.4);
+        }
+        .d12-blue:hover { 
+            background-color: rgba(52, 152, 219, 0.95); 
+            box-shadow: 0 0 25px rgba(52, 152, 219, 0.85); 
+        }
+
+        /* Jaune */
+        .d12-yellow { 
+            background-color: rgba(241, 196, 15, 0.75); 
+            color: #2c3e50; 
+            box-shadow: 0 0 15px rgba(241, 196, 15, 0.4);
+        }
+        .d12-yellow:hover { 
+            background-color: rgba(241, 196, 15, 0.95); 
+            box-shadow: 0 0 25px rgba(241, 196, 15, 0.85); 
+        }
+
+        /* Blanc */
+        .d12-white { 
+            background-color: rgba(255, 255, 255, 0.5); 
+            color: #2c3e50; 
+            border: 1px solid rgba(221, 221, 221, 0.8); 
+            box-sizing: border-box; 
+            box-shadow: 0 0 15px rgba(255, 255, 255, 0.5);
+        }
+        .d12-white:hover { 
+            background-color: rgba(255, 255, 255, 0.85); 
+            box-shadow: 0 0 25px rgba(255, 255, 255, 1); 
+        }
+
+        /* Violet */
+        .d12-purple { 
+            background-color: rgba(155, 89, 182, 0.75); 
+            color: white; 
+            box-shadow: 0 0 15px rgba(155, 89, 182, 0.4);
+        }
+        .d12-purple:hover { 
+            background-color: rgba(155, 89, 182, 0.95); 
+            box-shadow: 0 0 25px rgba(155, 89, 182, 0.85); 
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            article {
+                width: 100%;
+            }
+            header {
+                flex-direction: column;
+                text-align: center;
+                gap: 15px;
+                padding: 20px;
+            }
+            header .logo-container {
+                position: static;
+                transform: none;
+                order: -1;
+            }
+        }
     </style>
 </head>
 <body>
 
-    <header>
-        <div class="logo">LOGO</div>
-        <h1>Ma Boutique de Dés</h1>
-        <p>Découvrez notre sélection de dés uniques pour vos jeux de rôle et de plateau.</p>
-    </header>
+<div class="top-spacer"></div>
 
-    <div class="grid">
-        <!-- Article 1 -->
-        <div class="card">
-            <img src="https://via.placeholder.com/250" alt="Dé Standard">
-            <h3>Dé Classique</h3>
-            <p>10€</p>
-            <button onclick="alert('Commande effectuée pour le Dé Classique')">Commander</button>
-        </div>
-
-        <!-- Article 2 -->
-        <div class="card">
-            <img src="https://via.placeholder.com/250" alt="Dé Premium">
-            <h3>Dé Premium</h3>
-            <p>25€</p>
-            <button onclick="alert('Commande effectuée pour le Dé Premium')">Commander</button>
-        </div>
-
-        <!-- Article 3 -->
-        <div class="card">
-            <img src="https://via.placeholder.com/250" alt="Set de Dés">
-            <h3>Set Complet</h3>
-            <p>45€</p>
-            <button onclick="alert('Commande effectuée pour le Set Complet')">Commander</button>
-        </div>
+<header>
+    <h1>Mon Super Jeu D12</h1>
+    
+    <div class="logo-container">
+        <img src="https://via.placeholder.com/150x150?text=LOGO" alt="Logo du jeu">
     </div>
+
+    <p class="slogan">Le hasard au bout des doigts</p>
+</header>
+
+<section class="presentation-text">
+    <h2>Entrez dans l'arène du Dodécaèdre</h2>
+    <p>Bienvenue sur le site officiel de notre jeu de stratégie et d'aventure. Utilisez la puissance des 12 faces pour orienter votre destin, explorer des contrées lointaines et affronter vos adversaires dans des duels épiques. Retrouvez ci-dessous toutes nos actualités et guides de jeu.</p>
+</section>
+
+<div class="container">
+    
+    <article>
+        <span class="meta">Publié le 25 Mars 2026</span>
+        <h2>Règles de base</h2>
+        <p>Découvrez comment utiliser votre dé à 12 faces pour terrasser vos adversaires. Une description complète des mécaniques principales.</p>
+        <a href="#" class="btn-d12 d12-red">Lire</a>
+    </article>
+
+    <article>
+        <span class="meta">Publié le 24 Mars 2026</span>
+        <h2>Les Classes</h2>
+        <p>Guerrier, Mage ou Voleur : comment votre dé influence leurs compétences uniques. Chaque face compte !</p>
+        <a href="#" class="btn-d12 d12-green">Voir</a>
+    </article>
+
+    <article>
+        <span class="meta">Publié le 23 Mars 2026</span>
+        <h2>Les Extensions</h2>
+        <p>Ajoutez de nouvelles cartes et des dés spéciaux pour pimenter vos parties de jeu.</p>
+        <a href="#" class="btn-d12 d12-blue">Info</a>
+    </article>
+
+    <article>
+        <span class="meta">Publié le 22 Mars 2026</span>
+        <h2>Mode Solo</h2>
+        <p>Pas d'amis sous la main ? Découvrez les règles officielles pour jouer seul contre le plateau.</p>
+        <a href="#" class="btn-d12 d12-yellow">Lire</a>
+    </article>
+
+    <article>
+        <span class="meta">Publié le 21 Mars 2026</span>
+        <h2>La Communauté</h2>
+        <p>Rejoignez notre Discord pour trouver d'autres joueurs et partager vos scénarios personnalisés.</p>
+        <a href="#" class="btn-d12 d12-white">Découvrir</a>
+    </article>
+
+    <article>
+        <span class="meta">Publié le 20 Mars 2026</span>
+        <h2>Tournois 2026</h2>
+        <p>Toutes les dates des championnats régionaux et les récompenses exclusives à gagner.</p>
+        <a href="#" class="btn-d12 d12-purple">Info</a>
+    </article>
+
+    <article>
+        <h2>Stratégies Avancées</h2>
+        <p>Devenez un pro du calcul des probabilités de vos lancers.</p>
+        <a href="#" class="btn-d12 d12-red">Voir</a>
+    </article>
+    
+    <article>
+        <h2>Le Matériel</h2>
+        <p>Découvrez la qualité de fabrication de nos résines de dés.</p>
+        <a href="#" class="btn-d12 d12-green">Lire</a>
+    </article>
+    
+    <article>
+        <h2>FAQ</h2>
+        <p>Une question sur un point de règle précis ? La réponse est sûrement ici.</p>
+        <a href="#" class="btn-d12 d12-blue">Découvrir</a>
+    </article>
+    
+    <article>
+        <h2>La Genèse</h2>
+        <p>L'histoire de la création du jeu, des premiers croquis à la boîte finale.</p>
+        <a href="#" class="btn-d12 d12-yellow">Fin</a>
+    </article>
+
+</div>
+
+<footer>
+    <p>&copy; 2026 Mon Jeu D12 - Tous droits réservés</p>
+</footer>
 
 </body>
 </html>

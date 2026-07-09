@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Boutique de Dés</title>
+    <style>
+        body { font-family: sans-serif; text-align: center; line-height: 1.6; padding: 20px; background-color: #f4f4f9; }
+        header { margin-bottom: 40px; }
+        .logo { width: 100px; height: 100px; background: #333; color: white; line-height: 100px; border-radius: 50%; margin: 0 auto; }
+        .grid { display: flex; justify-content: center; gap: 20px; flex-wrap: wrap; }
+        .card { background: white; padding: 20px; border-radius: 8px; box-shadow: 0 2px 5px rgba(0,0,0,0.1); width: 250px; }
+        .card img { width: 100%; height: 150px; object-fit: cover; border-radius: 4px; }
+        button { background: #007bff; color: white; border: none; padding: 10px 20px; border-radius: 5px; cursor: pointer; margin-top: 10px; }
+        button:hover { background: #0056b3; }
+    </style>
+</head>
+<body>
+
+    <header>
+        <div class="logo">LOGO</div>
+        <h1>Ma Boutique de Dés</h1>
+        <p>Découvrez notre sélection de dés uniques pour vos jeux de rôle et de plateau.</p>
+    </header>
+
+    <div class="grid">
+        <!-- Article 1 -->
+        <div class="card">
+            <img src="https://via.placeholder.com/250" alt="Dé Standard">
+            <h3>Dé Classique</h3>
+            <p>10€</p>
+            <button onclick="alert('Commande effectuée pour le Dé Classique')">Commander</button>
+        </div>
+
+        <!-- Article 2 -->
+        <div class="card">
+            <img src="https://via.placeholder.com/250" alt="Dé Premium">
+            <h3>Dé Premium</h3>
+            <p>25€</p>
+            <button onclick="alert('Commande effectuée pour le Dé Premium')">Commander</button>
+        </div>
+
+        <!-- Article 3 -->
+        <div class="card">
+            <img src="https://via.placeholder.com/250" alt="Set de Dés">
+            <h3>Set Complet</h3>
+            <p>45€</p>
+            <button onclick="alert('Commande effectuée pour le Set Complet')">Commander</button>
+        </div>
+    </div>
+
+</body>
+</html>

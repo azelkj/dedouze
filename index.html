@@ -17,19 +17,19 @@
 
         /* 1. ESPACE BLANC TOUT EN HAUT */
         .top-spacer {
-            height: 30px;
+            height: 30px; /* Ajuste la hauteur de l'espace blanc ici */
             background-color: #ffffff;
         }
 
         /* 2. BARRE DU HAUT ROUGE AVEC DISPOSITION SPÉCIALE */
         header {
-            background: #e74c3c;
+            background: #e74c3c; /* Rouge */
             color: #ffffff;
             padding: 15px 40px;
             display: flex;
             align-items: center;
-            justify-content: space-between;
-            position: relative;
+            justify-content: space-between; /* Pousse le nom à gauche et le slogan à droite */
+            position: relative; /* Nécessaire pour centrer le logo au milieu */
             box-shadow: 0 4px 10px rgba(0,0,0,0.1);
         }
 
@@ -37,7 +37,7 @@
             margin: 0;
             font-size: 1.5rem;
             font-weight: 700;
-            z-index: 2;
+            z-index: 2; /* Reste au-dessus du logo si l'écran rétrécit */
         }
 
         /* LOGO PILE AU MILIEU */
@@ -50,7 +50,7 @@
         }
 
         header img {
-            height: 60px;
+            height: 60px; /* Ajuste la taille de ton logo */
             width: auto;
             display: block;
             object-fit: contain;
@@ -96,7 +96,7 @@
 
         /* CASES RECTANGULAIRES EN VERT PASTEL */
         article {
-            background: #e2f5ed;
+            background: #e2f5ed; /* Vert Pastel */
             border-radius: 12px;
             box-shadow: 0 4px 10px rgba(0, 0, 0, 0.02);
             width: calc(33% - 20px);
@@ -140,7 +140,7 @@
             margin-top: 60px;
         }
 
-        /* STRUCTURE DU BOUTON DÉ AVEC TRANSPARENCE ET EFFET DE REFLET */
+        /* STRUCTURE DE BASE DU BOUTON DÉ À 12 FACES ET EFFET CRISTAL / VERRE */
         .btn-d12 {
             display: block;
             width: 100px;
@@ -154,48 +154,22 @@
             border: none;
             cursor: pointer;
             position: relative;
-            overflow: hidden; /* Empêche le reflet de dépasser du dé */
             
             /* Effet flou de fond (Glassmorphism) */
             backdrop-filter: blur(4px);
             -webkit-backdrop-filter: blur(4px);
             
-            /* Animations fluides */
+            /* Animation fluide pour rotation, couleur et halo lumineux */
             transition: transform 0.6s cubic-bezier(0.25, 1, 0.5, 1), background-color 0.3s ease, box-shadow 0.3s ease;
             -webkit-clip-path: polygon(50% 0%, 90% 20%, 100% 60%, 75% 100%, 25% 100%, 0% 60%, 10% 20%);
             clip-path: polygon(50% 0%, 90% 20%, 100% 60%, 75% 100%, 25% 100%, 0% 60%, 10% 20%);
         }
 
-        /* CRÉATION DU REFLET LUMINEUX (Éclat oblique) */
-        .btn-d12::after {
-            content: '';
-            position: absolute;
-            top: -50%;
-            left: -60%;
-            width: 30%;
-            height: 200%;
-            background: linear-gradient(
-                to right, 
-                rgba(255, 255, 255, 0) 0%, 
-                rgba(255, 255, 255, 0.55) 50%, 
-                rgba(255, 255, 255, 0) 100%
-            );
-            transform: rotate(30deg);
-            transition: transform 0.5s ease;
-        }
-
-        /* ANIMATION DES EFFETS AU SURVOL */
         .btn-d12:hover {
             transform: rotate(360deg);
         }
 
-        /* Au survol, le reflet traverse le dé de gauche à droite */
-        .btn-d12:hover::after {
-            transform: translate(400%, -20%) rotate(30deg);
-            transition: transform 0.6s ease-out;
-        }
-
-        /* COULEURS DES DÉS (TRANSPARENCE + GLOW) */
+        /* COULEURS DES DÉS AVEC EFFETS TRANSPARENCE (0.75) ET LUMIÈRE (GLOW) */
         /* Rouge */
         .d12-red { 
             background-color: rgba(231, 76, 60, 0.75); 
@@ -242,14 +216,14 @@
 
         /* Blanc */
         .d12-white { 
-            background-color: rgba(255, 255, 255, 0.5); 
+            background-color: rgba(255, 255, 255, 0.6); 
             color: #2c3e50; 
             border: 1px solid rgba(221, 221, 221, 0.8); 
             box-sizing: border-box; 
             box-shadow: 0 0 15px rgba(255, 255, 255, 0.5);
         }
         .d12-white:hover { 
-            background-color: rgba(255, 255, 255, 0.85); 
+            background-color: rgba(255, 255, 255, 0.9); 
             box-shadow: 0 0 25px rgba(255, 255, 255, 1); 
         }
 
@@ -278,7 +252,7 @@
             header .logo-container {
                 position: static;
                 transform: none;
-                order: -1;
+                order: -1; /* Met le logo tout en haut sur mobile */
             }
         }
     </style>
@@ -291,7 +265,8 @@
     <h1>Mon Super Jeu D12</h1>
     
     <div class="logo-container">
-       <img src="logo.png" alt="Logo du jeu">
+        <!-- L'image pointe maintenant vers ton fichier local 'logo.png' -->
+        <img src="logo.png" alt="Logo du jeu">
     </div>
 
     <p class="slogan">Le hasard au bout des doigts</p>
@@ -304,6 +279,7 @@
 
 <div class="container">
     
+    <!-- Article 1 - Rouge -->
     <article>
         <span class="meta">Publié le 25 Mars 2026</span>
         <h2>Règles de base</h2>
@@ -311,6 +287,7 @@
         <a href="#" class="btn-d12 d12-red">Lire</a>
     </article>
 
+    <!-- Article 2 - Vert -->
     <article>
         <span class="meta">Publié le 24 Mars 2026</span>
         <h2>Les Classes</h2>
@@ -318,6 +295,7 @@
         <a href="#" class="btn-d12 d12-green">Voir</a>
     </article>
 
+    <!-- Article 3 - Bleu -->
     <article>
         <span class="meta">Publié le 23 Mars 2026</span>
         <h2>Les Extensions</h2>
@@ -325,6 +303,7 @@
         <a href="#" class="btn-d12 d12-blue">Info</a>
     </article>
 
+    <!-- Article 4 - Jaune -->
     <article>
         <span class="meta">Publié le 22 Mars 2026</span>
         <h2>Mode Solo</h2>
@@ -332,6 +311,7 @@
         <a href="#" class="btn-d12 d12-yellow">Lire</a>
     </article>
 
+    <!-- Article 5 - Blanc -->
     <article>
         <span class="meta">Publié le 21 Mars 2026</span>
         <h2>La Communauté</h2>
@@ -339,6 +319,7 @@
         <a href="#" class="btn-d12 d12-white">Découvrir</a>
     </article>
 
+    <!-- Article 6 - Violet -->
     <article>
         <span class="meta">Publié le 20 Mars 2026</span>
         <h2>Tournois 2026</h2>
@@ -346,24 +327,29 @@
         <a href="#" class="btn-d12 d12-purple">Info</a>
     </article>
 
+    <!-- Répétition des couleurs pour les 4 articles restants -->
+    <!-- Article 7 - Rouge -->
     <article>
         <h2>Stratégies Avancées</h2>
         <p>Devenez un pro du calcul des probabilités de vos lancers.</p>
         <a href="#" class="btn-d12 d12-red">Voir</a>
     </article>
     
+    <!-- Article 8 - Vert -->
     <article>
         <h2>Le Matériel</h2>
         <p>Découvrez la qualité de fabrication de nos résines de dés.</p>
         <a href="#" class="btn-d12 d12-green">Lire</a>
     </article>
     
+    <!-- Article 9 - Bleu -->
     <article>
         <h2>FAQ</h2>
         <p>Une question sur un point de règle précis ? La réponse est sûrement ici.</p>
         <a href="#" class="btn-d12 d12-blue">Découvrir</a>
     </article>
     
+    <!-- Article 10 - Jaune -->
     <article>
         <h2>La Genèse</h2>
         <p>L'histoire de la création du jeu, des premiers croquis à la boîte finale.</p>

@@ -5,7 +5,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Mon Jeu de Dés - 10 Articles</title>
     <style>
-        /* Styles de base */
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             line-height: 1.6;
@@ -13,247 +12,109 @@
             padding: 0;
             background-color: #ffffff;
             color: #333333;
+            overflow-x: hidden;
         }
-
-        /* 1. ESPACE BLANC TOUT EN HAUT */
-        .top-spacer {
-            height: 30px; /* Ajuste la hauteur de l'espace blanc ici */
-            background-color: #ffffff;
-        }
-
-        /* 2. BARRE DU HAUT ROUGE AVEC DISPOSITION SPÉCIALE */
+        .top-spacer { height: 30px; background-color: #ffffff; }
         header {
-            background: #e74c3c; /* Rouge */
+            background: #e74c3c;
             color: #ffffff;
             padding: 15px 40px;
             display: flex;
             align-items: center;
-            justify-content: space-between; /* Pousse le nom à gauche et le slogan à droite */
-            position: relative; /* Nécessaire pour centrer le logo au milieu */
+            justify-content: space-between;
+            position: relative;
             box-shadow: 0 4px 10px rgba(0,0,0,0.1);
         }
-
-        header h1 {
-            margin: 0;
-            font-size: 1.5rem;
-            font-weight: 700;
-            z-index: 2; /* Reste au-dessus du logo si l'écran rétrécit */
+        header h1 { margin: 0; font-size: 1.5rem; font-weight: 700; z-index: 2; }
+        header .logo-container { position: absolute; left: 50%; top: 50%; transform: translate(-50%, -50%); z-index: 1; }
+        header img { height: 60px; width: auto; display: block; object-fit: contain; }
+        header .header-right { display: flex; align-items: center; gap: 20px; z-index: 2; }
+        header .slogan { margin: 0; font-style: italic; font-size: 1.1rem; }
+        .panier-statut {
+            font-weight: bold;
+            background: rgba(255, 255, 255, 0.2);
+            padding: 8px 15px;
+            border-radius: 20px;
+            white-space: nowrap;
+            cursor: pointer;
+            transition: background 0.2s, transform 0.2s;
         }
+        .panier-statut:hover { background: rgba(255, 255, 255, 0.35); }
 
-        /* LOGO PILE AU MILIEU */
-        header .logo-container {
-            position: absolute;
-            left: 50%;
-            top: 50%;
-            transform: translate(-50%, -50%);
-            z-index: 1;
+        @keyframes pop-secousse {
+            0% { transform: scale(1); }
+            20% { transform: scale(1.15) rotate(-6deg); }
+            40% { transform: scale(1.15) rotate(6deg); }
+            60% { transform: scale(1.15) rotate(-6deg); }
+            80% { transform: scale(1.15) rotate(6deg); }
+            100% { transform: scale(1); }
         }
+        .panier-statut.anime { animation: pop-secousse 0.4s ease-in-out; background: rgba(255, 255, 255, 0.5); }
 
-        header img {
-            height: 60px; /* Ajuste la taille de ton logo */
-            width: auto;
-            display: block;
-            object-fit: contain;
-        }
-
-        /* SLOGAN À DROITE */
-        header .slogan {
-            margin: 0;
-            font-style: italic;
-            font-size: 1.1rem;
-            z-index: 2;
-        }
-
-        /* 3. TEXTE DE PRÉSENTATION EN DESSOUS */
-        .presentation-text {
-            max-width: 800px;
-            margin: 40px auto 20px auto;
-            text-align: center;
-            padding: 0 20px;
-        }
-
-        .presentation-text h2 {
-            color: #2c3e50;
-            font-size: 2rem;
-            margin-bottom: 15px;
-        }
-
-        .presentation-text p {
-            font-size: 1.1rem;
-            color: #666666;
-        }
-
-        /* Grille d'articles */
-        .container {
-            max-width: 1100px;
-            margin: 40px auto;
-            padding: 0 20px;
-            display: flex;
-            flex-wrap: wrap;
-            gap: 30px;
-            justify-content: center;
-        }
-
-        /* CASES RECTANGULAIRES EN VERT PASTEL */
-        article {
-            background: #e2f5ed; /* Vert Pastel */
-            border-radius: 12px;
-            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.02);
-            width: calc(33% - 20px);
-            min-width: 280px;
-            padding: 25px;
+        .panier-sidebar {
+            position: fixed;
+            top: 0;
+            right: -390px;
+            width: 380px;
+            height: 100%;
+            background: #ffffff;
+            box-shadow: -5px 0 15px rgba(0,0,0,0.15);
+            z-index: 1000;
+            transition: right 0.3s ease;
+            padding: 20px;
             box-sizing: border-box;
-            transition: transform 0.3s ease, box-shadow 0.3s ease;
             display: flex;
             flex-direction: column;
         }
+        .panier-sidebar.ouvert { right: 0; }
+        .panier-sidebar h2 { margin-top: 0; border-bottom: 2px solid #e2f5ed; padding-bottom: 10px; color: #2c3e50; display: flex; justify-content: space-between; align-items: center; }
+        .btn-fermer-panier { background: none; border: none; font-size: 1.5rem; cursor: pointer; color: #7f8c8d; }
+        .liste-panier-items { list-style: none; padding: 0; margin: 0; max-height: 50%; overflow-y: auto; border-bottom: 1px solid #eeeeee; }
+        .liste-panier-items li { display: flex; justify-content: space-between; align-items: center; padding: 12px 0; border-bottom: 1px solid #eeeeee; font-size: 0.95rem; }
+        .item-infos { display: flex; flex-direction: column; max-width: 160px; }
+        .item-nom { font-weight: 600; color: #2c3e50; }
+        .item-prix-unit { font-size: 0.8rem; color: #7f8c8d; }
+        .item-controles { display: flex; align-items: center; gap: 8px; }
+        .btn-qty { background: #e2f5ed; border: none; color: #27ae60; font-weight: bold; font-size: 1rem; width: 28px; height: 28px; border-radius: 50%; cursor: pointer; display: flex; align-items: center; justify-content: center; transition: background 0.2s; }
+        .btn-qty:hover { background: #27ae60; color: white; }
+        .item-qty { font-weight: bold; min-width: 16px; text-align: center; }
+        .item-total-ligne { font-weight: bold; color: #2c3e50; min-width: 55px; text-align: right; }
 
-        article:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.08);
-        }
+        .panier-footer { border-top: 2px solid #e2f5ed; padding-top: 15px; background: white; margin-top: auto; }
+        .panier-total { display: flex; justify-content: space-between; font-weight: bold; font-size: 1.2rem; color: #2c3e50; margin-bottom: 15px; }
+        .btn-payer { width: 100%; background: #27ae60; color: white; border: none; padding: 12px; border-radius: 8px; font-size: 1.1rem; font-weight: bold; cursor: pointer; transition: background 0.2s; }
+        .btn-payer:hover { background: #219653; }
+        .btn-payer:disabled { background: #bdc3c7; cursor: not-allowed; }
 
-        article h2 {
-            color: #2c3e50;
-            margin-top: 0;
-            font-size: 1.4rem;
-        }
+        .panier-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.4); z-index: 999; display: none; }
+        .panier-overlay.visible { display: block; }
 
-        .meta {
-            font-size: 0.8rem;
-            color: #7f8c8d;
-            margin-bottom: 12px;
-        }
+        .presentation-text { max-width: 800px; margin: 40px auto 20px auto; text-align: center; padding: 0 20px; }
+        .presentation-text h2 { color: #2c3e50; font-size: 2rem; margin-bottom: 15px; }
+        .presentation-text p { font-size: 1.1rem; color: #666666; }
 
-        article p {
-            flex-grow: 1;
-            margin-bottom: 25px;
-            color: #4a5568;
-        }
+        .container { max-width: 1100px; margin: 40px auto; padding: 0 20px; display: flex; flex-wrap: wrap; gap: 30px; justify-content: center; }
+        article { background: #e2f5ed; border-radius: 12px; box-shadow: 0 4px 10px rgba(0, 0, 0, 0.02); width: calc(33% - 20px); min-width: 280px; padding: 25px; box-sizing: border-box; transition: transform 0.3s ease, box-shadow 0.3s ease; display: flex; flex-wrap: nowrap; flex-direction: column; }
+        article:hover { transform: translateY(-5px); box-shadow: 0 8px 20px rgba(0, 0, 0, 0.08); }
+        article h2 { color: #2c3e50; margin-top: 0; font-size: 1.4rem; }
+        .meta { font-size: 0.8rem; color: #7f8c8d; margin-bottom: 12px; }
+        article p { flex-grow: 1; margin-bottom: 25px; color: #4a5568; }
+        footer { text-align: center; padding: 30px; background: #ffffff; color: #888888; border-top: 1px solid #eeeeee; margin-top: 60px; }
 
-        footer {
-            text-align: center;
-            padding: 30px;
-            background: #ffffff;
-            color: #888888;
-            border-top: 1px solid #eeeeee;
-            margin-top: 60px;
-        }
+        .btn-d12 { display: block; width: 100px; height: 100px; margin: 0 auto; font-weight: bold; font-size: 0.95rem; text-align: center; line-height: 100px; border: none; cursor: pointer; position: relative; backdrop-filter: blur(4px); transition: transform 0.6s cubic-bezier(0.25, 1, 0.5, 1), background-color 0.3s ease; clip-path: polygon(50% 0%, 90% 20%, 100% 60%, 75% 100%, 25% 100%, 0% 60%, 10% 20%); }
+        .btn-d12:hover { transform: rotate(360deg); }
+        .d12-red { background-color: rgba(231, 76, 60, 0.75); color: white; }
+        .d12-red:hover { background-color: rgba(231, 76, 60, 0.95); }
+        .d12-green { background-color: rgba(46, 204, 113, 0.75); color: white; }
+        .d12-green:hover { background-color: rgba(46, 204, 113, 0.95); }
+        .d12-blue { background-color: rgba(52, 152, 219, 0.75); color: white; }
+        .d12-blue:hover { background-color: rgba(52, 152, 219, 0.95); }
 
-        /* STRUCTURE DE BASE DU BOUTON DÉ À 12 FACES ET EFFET CRISTAL / VERRE */
-        .btn-d12 {
-            display: block;
-            width: 100px;
-            height: 100px;
-            margin: 0 auto;
-            text-decoration: none;
-            font-weight: bold;
-            font-size: 0.95rem;
-            text-align: center;
-            line-height: 100px;
-            border: none;
-            cursor: pointer;
-            position: relative;
-            
-            /* Effet flou de fond (Glassmorphism) */
-            backdrop-filter: blur(4px);
-            -webkit-backdrop-filter: blur(4px);
-            
-            /* Animation fluide pour rotation, couleur et halo lumineux */
-            transition: transform 0.6s cubic-bezier(0.25, 1, 0.5, 1), background-color 0.3s ease, box-shadow 0.3s ease;
-            -webkit-clip-path: polygon(50% 0%, 90% 20%, 100% 60%, 75% 100%, 25% 100%, 0% 60%, 10% 20%);
-            clip-path: polygon(50% 0%, 90% 20%, 100% 60%, 75% 100%, 25% 100%, 0% 60%, 10% 20%);
-        }
-
-        .btn-d12:hover {
-            transform: rotate(360deg);
-        }
-
-        /* COULEURS DES DÉS AVEC EFFETS TRANSPARENCE (0.75) ET LUMIÈRE (GLOW) */
-        /* Rouge */
-        .d12-red { 
-            background-color: rgba(231, 76, 60, 0.75); 
-            color: white; 
-            box-shadow: 0 0 15px rgba(231, 76, 60, 0.4);
-        }
-        .d12-red:hover { 
-            background-color: rgba(231, 76, 60, 0.95); 
-            box-shadow: 0 0 25px rgba(231, 76, 60, 0.85); 
-        }
-
-        /* Vert */
-        .d12-green { 
-            background-color: rgba(46, 204, 113, 0.75); 
-            color: white; 
-            box-shadow: 0 0 15px rgba(46, 204, 113, 0.4);
-        }
-        .d12-green:hover { 
-            background-color: rgba(46, 204, 113, 0.95); 
-            box-shadow: 0 0 25px rgba(46, 204, 113, 0.85); 
-        }
-
-        /* Bleu */
-        .d12-blue { 
-            background-color: rgba(52, 152, 219, 0.75); 
-            color: white; 
-            box-shadow: 0 0 15px rgba(52, 152, 219, 0.4);
-        }
-        .d12-blue:hover { 
-            background-color: rgba(52, 152, 219, 0.95); 
-            box-shadow: 0 0 25px rgba(52, 152, 219, 0.85); 
-        }
-
-        /* Jaune */
-        .d12-yellow { 
-            background-color: rgba(241, 196, 15, 0.75); 
-            color: #2c3e50; 
-            box-shadow: 0 0 15px rgba(241, 196, 15, 0.4);
-        }
-        .d12-yellow:hover { 
-            background-color: rgba(241, 196, 15, 0.95); 
-            box-shadow: 0 0 25px rgba(241, 196, 15, 0.85); 
-        }
-
-        /* Blanc */
-        .d12-white { 
-            background-color: rgba(255, 255, 255, 0.6); 
-            color: #2c3e50; 
-            border: 1px solid rgba(221, 221, 221, 0.8); 
-            box-sizing: border-box; 
-            box-shadow: 0 0 15px rgba(255, 255, 255, 0.5);
-        }
-        .d12-white:hover { 
-            background-color: rgba(255, 255, 255, 0.9); 
-            box-shadow: 0 0 25px rgba(255, 255, 255, 1); 
-        }
-
-        /* Violet */
-        .d12-purple { 
-            background-color: rgba(155, 89, 182, 0.75); 
-            color: white; 
-            box-shadow: 0 0 15px rgba(155, 89, 182, 0.4);
-        }
-        .d12-purple:hover { 
-            background-color: rgba(155, 89, 182, 0.95); 
-            box-shadow: 0 0 25px rgba(155, 89, 182, 0.85); 
-        }
-
-        /* Responsive */
         @media (max-width: 768px) {
-            article {
-                width: 100%;
-            }
-            header {
-                flex-direction: column;
-                text-align: center;
-                gap: 15px;
-                padding: 20px;
-            }
-            header .logo-container {
-                position: static;
-                transform: none;
-                order: -1; /* Met le logo tout en haut sur mobile */
-            }
+            article { width: 100%; }
+            header { flex-direction: column; text-align: center; gap: 15px; padding: 20px; }
+            header .logo-container { position: static; transform: none; order: -1; }
+            header .header-right { flex-direction: column; gap: 10px; }
         }
     </style>
 </head>
@@ -263,104 +124,176 @@
 
 <header>
     <h1>Bienvenue sur le site de la Dédouze</h1>
-    
     <div class="logo-container">
-    
-        <img src="logo-dedouze-detoure-300x258.png">
+        <img src="logo-dedouze-detoure-300x258.png" alt="Logo Dédouze">
     </div>
-
-    <p class="slogan">Un jeu d'adresse et de chance inspiré de la pétanque</p>
+    <div class="header-right">
+        <p class="slogan">Un jeu d'adresse et de chance inspiré de la pétanque</p>
+        <div class="panier-statut" id="ouvrir-panier">
+            🛒 Panier : <span id="compteur-panier">0</span> art.
+        </div>
+    </div>
 </header>
+
+<div class="panier-overlay" id="panier-overlay"></div>
+<div class="panier-sidebar" id="panier-sidebar">
+    <h2>Mon Panier <button class="btn-fermer-panier" id="fermer-panier">&times;</button></h2>
+    
+    <ul class="liste-panier-items" id="liste-panier-items">
+        <p style="color: #888; text-align: center; margin-top: 40px;" id="panier-vide-msg">Votre panier est vide.</p>
+    </ul>
+    
+    <div class="panier-footer">
+        <div class="panier-total">
+            <span>Total :</span>
+            <span><span id="total-prix">0</span> €</span>
+        </div>
+        <button class="btn-payer" id="btn-payer" disabled>Procéder au paiement sécurisé</button>
+    </div>
+</div>
 
 <section class="presentation-text">
     <h2>Entrez dans l'arène du Dodécaèdre</h2>
-    <p>Comment ça se joue la dédouze?.</p>
+    <p>Comment ça se joue la dédouze ?</p>
 </section>
 
 <div class="container">
-    
-    <!-- Article 1 - Rouge -->
     <article>
         <span class="meta">Publié le 25 Mars 2026</span>
         <h2>Règles de base</h2>
-        <p>Découvrez comment utiliser votre dé à 12 faces pour terrasser vos adversaires. Une description complète des mécaniques principales.</p>
-        <a href="#" class="btn-d12 d12-red">Lire</a>
+        <p>Découvrez comment utiliser votre dé à 12 faces pour terrasser vos adversaires.</p>
+        <button class="btn-d12 d12-red" data-nom="Règles de base" data-prix="15">Ajouter</button>
     </article>
-
-    <!-- Article 2 - Vert -->
     <article>
         <span class="meta">Publié le 24 Mars 2026</span>
         <h2>Les Classes</h2>
-        <p>Guerrier, Mage ou Voleur : comment votre dé influence leurs compétences uniques. Chaque face compte !</p>
-        <a href="#" class="btn-d12 d12-green">Voir</a>
+        <p>Guerrier, Mage ou Voleur : comment votre dé influence leurs compétences uniques.</p>
+        <button class="btn-d12 d12-green" data-nom="Les Classes" data-prix="12">Ajouter</button>
     </article>
-
-    <!-- Article 3 - Bleu -->
     <article>
         <span class="meta">Publié le 23 Mars 2026</span>
         <h2>Les Extensions</h2>
         <p>Ajoutez de nouvelles cartes et des dés spéciaux pour pimenter vos parties de jeu.</p>
-        <a href="#" class="btn-d12 d12-blue">Info</a>
+        <button class="btn-d12 d12-blue" data-nom="Les Extensions" data-prix="20">Ajouter</button>
     </article>
-
-    <!-- Article 4 - Jaune -->
-    <article>
-        <span class="meta">Publié le 22 Mars 2026</span>
-        <h2>Mode Solo</h2>
-        <p>Pas d'amis sous la main ? Découvrez les règles officielles pour jouer seul contre le plateau.</p>
-        <a href="#" class="btn-d12 d12-yellow">Lire</a>
-    </article>
-
-    <!-- Article 5 - Blanc -->
-    <article>
-        <span class="meta">Publié le 21 Mars 2026</span>
-        <h2>La Communauté</h2>
-        <p>Rejoignez notre Discord pour trouver d'autres joueurs et partager vos scénarios personnalisés.</p>
-        <a href="#" class="btn-d12 d12-white">Découvrir</a>
-    </article>
-
-    <!-- Article 6 - Violet -->
-    <article>
-        <span class="meta">Publié le 20 Mars 2026</span>
-        <h2>Tournois 2026</h2>
-        <p>Toutes les dates des championnats régionaux et les récompenses exclusives à gagner.</p>
-        <a href="#" class="btn-d12 d12-purple">Info</a>
-    </article>
-
-    <!-- Répétition des couleurs pour les 4 articles restants -->
-    <!-- Article 7 - Rouge -->
-    <article>
-        <h2>Stratégies Avancées</h2>
-        <p>Devenez un pro du calcul des probabilités de vos lancers.</p>
-        <a href="#" class="btn-d12 d12-red">Voir</a>
-    </article>
-    
-    <!-- Article 8 - Vert -->
-    <article>
-        <h2>Le Matériel</h2>
-        <p>Découvrez la qualité de fabrication de nos résines de dés.</p>
-        <a href="#" class="btn-d12 d12-green">Lire</a>
-    </article>
-    
-    <!-- Article 9 - Bleu -->
-    <article>
-        <h2>FAQ</h2>
-        <p>Une question sur un point de règle précis ? La réponse est sûrement ici.</p>
-        <a href="#" class="btn-d12 d12-blue">Découvrir</a>
-    </article>
-    
-    <!-- Article 10 - Jaune -->
-    <article>
-        <h2>La Genèse</h2>
-        <p>L'histoire de la création du jeu, des premiers croquis à la boîte finale.</p>
-        <a href="#" class="btn-d12 d12-yellow">Fin</a>
-    </article>
-
 </div>
 
 <footer>
     <p>&copy; 2026 Mon Jeu D12 - Tous droits réservés</p>
 </footer>
+
+<script>
+    let panier = {};
+
+    const compteurAffichage = document.getElementById('compteur-panier');
+    const tousLesBoutons = document.querySelectorAll('.btn-d12');
+    const sidebar = document.getElementById('panier-sidebar');
+    const overlay = document.getElementById('panier-overlay');
+    const btnOuvrir = document.getElementById('ouvrir-panier');
+    const btnFermer = document.getElementById('fermer-panier');
+    const listeItemsHTML = document.getElementById('liste-panier-items');
+    const totalPrixHTML = document.getElementById('total-prix');
+    const panierVideMsg = document.getElementById('panier-vide-msg');
+    const btnPayer = document.getElementById('btn-payer');
+
+    // Vérifier si on revient d'un paiement réussi
+    const params = new URLSearchParams(window.location.search);
+    if (params.get('succes')) {
+        alert("Paiement validé ! Merci pour votre commande.");
+        window.history.replaceState({}, document.title, window.location.pathname);
+    }
+
+    function changerQuantite(nom, delta) {
+        if (!panier[nom]) return;
+        panier[nom].quantite += delta;
+        if (panier[nom].quantite <= 0) delete panier[nom];
+        majRenduPanier();
+    }
+
+    function majRenduPanier() {
+        listeItemsHTML.innerHTML = "";
+        let totalArticles = 0;
+        let prixTotalGeneral = 0;
+        const cles = Object.keys(panier);
+
+        if (cles.length === 0) {
+            listeItemsHTML.appendChild(panierVideMsg);
+            compteurAffichage.textContent = "0";
+            totalPrixHTML.textContent = "0";
+            btnPayer.disabled = true;
+            return;
+        }
+
+        cles.forEach(nom => {
+            const article = panier[nom];
+            const totalLigne = article.prix * article.quantite;
+            totalArticles += article.quantite;
+            prixTotalGeneral += totalLigne;
+
+            const li = document.createElement('li');
+            li.innerHTML = `
+                <div class="item-infos">
+                    <span class="item-nom">${nom}</span>
+                    <span class="item-prix-unit">${article.prix}€ / u</span>
+                </div>
+                <div class="item-controles">
+                    <button class="btn-qty" onclick="changerQuantite('${nom.replace(/'/g, "\\'")}', -1)">-</button>
+                    <span class="item-qty">${article.quantite}</span>
+                    <button class="btn-qty" onclick="changerQuantite('${nom.replace(/'/g, "\\'")}', 1)">+</button>
+                </div>
+                <div class="item-total-ligne">${totalLigne} €</div>
+            `;
+            listeItemsHTML.appendChild(li);
+        });
+
+        compteurAffichage.textContent = totalArticles;
+        totalPrixHTML.textContent = prixTotalGeneral;
+        btnPayer.disabled = false;
+    }
+
+    tousLesBoutons.forEach(bouton => {
+        bouton.addEventListener('click', () => {
+            const nom = bouton.getAttribute('data-nom');
+            const prix = parseFloat(bouton.getAttribute('data-prix'));
+
+            if (panier[nom]) { panier[nom].quantite += 1; } 
+            else { panier[nom] = { prix: prix, quantite: 1 }; }
+
+            majRenduPanier();
+            btnOuvrir.classList.add('anime');
+            setTimeout(() => { btnOuvrir.classList.remove('anime'); }, 400);
+        });
+    });
+
+    // ACTION : Envoi du panier au serveur Node pour redirection Stripe
+    btnPayer.addEventListener('click', async () => {
+        btnPayer.textContent = "Chargement...";
+        btnPayer.disabled = true;
+
+        try {
+            const reponse = await fetch('/creer-session-paiement', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ panier: panier })
+            });
+            const data = await reponse.json();
+            
+            // On redirige l'utilisateur directement sur la page Stripe sécurisée
+            window.location.href = data.url;
+        } catch (error) {
+            alert("Erreur lors de la liaison avec Stripe.");
+            btnPayer.textContent = "Procéder au paiement sécurisé";
+            btnPayer.disabled = false;
+        }
+    });
+
+    function ouvrirLePanier() { sidebar.classList.add('ouvert'); overlay.classList.add('visible'); }
+    function fermerLePanier() { sidebar.classList.remove('ouvert'); overlay.classList.remove('visible'); }
+
+    btnOuvrir.addEventListener('click', ouvrirLePanier);
+    btnFermer.addEventListener('click', fermerLePanier);
+    overlay.addEventListener('click', fermerLePanier);
+</script>
 
 </body>
 </html>
